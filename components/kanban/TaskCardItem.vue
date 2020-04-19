@@ -35,11 +35,17 @@
     <v-card-actions>
       <v-list-item class="grow">
         <v-list-item-avatar color="grey darken-3">
-          <v-img
-            class="elevation-6"
-            :alt="assignee.name"
-            :src="assignee.avatar"
-          ></v-img>
+          <v-tooltip bottom>
+             <template v-slot:activator="{ on }">
+              <v-avatar v-on="on">
+                <v-img
+                  :alt="assignee.name"
+                  :src="assignee.avatar"
+                 ></v-img>
+              </v-avatar>
+             </template>
+            <span>{{ assignee.name }}</span>
+          </v-tooltip>
         </v-list-item-avatar>
 
         <v-row
@@ -47,10 +53,10 @@
           justify="end"
         >
           <v-icon class="mr-1">mdi-calendar-arrow-right</v-icon>
-          <span class="subheading mr-2">{{ $moment(startDate).format("DD MMMM YYYY") }}</span>
+          <span class="subheading mr-2">{{ $moment(startDate).format("ll") }}</span>
           <span class="mr-1">·</span>
           <v-icon class="mr-1">mdi-calendar-arrow-left</v-icon>
-          <span class="subheading mr-2">{{ $moment(endDate).format("DD MMMM YYYY") }}</span>
+          <span class="subheading mr-2">{{ $moment(endDate).format("ll") }}</span>
           <span class="mr-1">·</span>
           <v-icon class="mr-1">mdi-progress-check</v-icon>
           <span class="subheading">{{ estimation }}h</span>
