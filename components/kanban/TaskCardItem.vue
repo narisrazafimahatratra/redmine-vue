@@ -34,31 +34,82 @@
 
     <v-card-actions>
       <v-list-item class="grow">
-        <v-list-item-avatar color="grey darken-3">
-          <v-tooltip bottom>
-             <template v-slot:activator="{ on }">
-              <v-avatar v-on="on">
-                <v-img
-                  :alt="assignee.name"
-                  :src="assignee.avatar"
-                 ></v-img>
-              </v-avatar>
-             </template>
-            <span>{{ assignee.name }}</span>
-          </v-tooltip>
-        </v-list-item-avatar>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+          <v-avatar v-on="on">
+            <v-img
+              :alt="assignee.name"
+              :src="assignee.avatar"
+             ></v-img>
+          </v-avatar>
+          </template>
+         <span>{{ assignee.name }}</span>
+        </v-tooltip>
+
+        <v-spacer></v-spacer>
 
         <v-row
           align="center"
           justify="end"
         >
-          <v-icon class="mr-1">mdi-calendar-arrow-right</v-icon>
-          <span class="subheading mr-2">{{ $moment(startDate).format("ll") }}</span>
-          <span class="mr-1">·</span>
-          <v-icon class="mr-1">mdi-calendar-arrow-left</v-icon>
-          <span class="subheading mr-2">{{ $moment(endDate).format("ll") }}</span>
-          <span class="mr-1">·</span>
-          <v-icon class="mr-1">mdi-progress-check</v-icon>
+          <v-menu
+            ref="menu"
+            v-model="menu"
+            :close-on-content-click="false"
+            :return-value.sync="dateRange"
+            transition="scale-transition"
+            offset-y
+            min-width="290px"
+          >
+             <template v-slot:activator="{ on }">
+              <v-text-field
+                v-model="dateRangeText"
+                label="Date début et fin"
+                readonly
+                clearable
+                v-on="on"
+                @click:clear="dateRange = []"
+               ></v-text-field>
+             </template>
+            <v-date-picker v-model="dateRange" no-title range>
+              <v-spacer></v-spacer>
+              <v-btn text color="primary" @click="menu = false">Annuler</v-btn>
+              <v-btn text color="primary" @click="$refs.menu.save(dateRange)">OK</v-btn>
+            </v-date-picker>
+          </v-menu>
+          <span class="mr-1 ml-1">·</span>
+          <v-menu
+            ref="menu1"
+            v-model="menu1"
+            :close-on-content-click="false"
+            :return-value.sync="estimation"
+            transition="scale-transition"
+            offset-y
+            min-width="290px"
+          >
+            <template v-slot:activator="{ on }">
+              <v-btn icon color="pink" v-on="on">
+                <v-icon class="mr-1">mdi-clock-outline</v-icon>
+              </v-btn>
+            </template>
+           <v-card>
+             <v-card-text>
+              <v-text-field
+                label="Estimation"
+                prepend-inner-icon="schedule"
+                outlined
+                v-model="estimation"
+                clearable
+                ></v-text-field>
+            </v-card-text>
+            <v-divider />
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn text color="primary" @click="menu1 = false">Annuler</v-btn>
+              <v-btn text color="primary" @click="$refs.menu1.save(estimation)">OK</v-btn>
+            </v-card-actions>
+           </v-card>
+          </v-menu>
           <span class="subheading">{{ estimation }}h</span>
         </v-row>
       </v-list-item>
@@ -79,11 +130,20 @@ export default {
         name: 'Naris Razafimahatratra',
         avatar: 'https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light'
       },
-      startDate: '04-05-2020',
-      endDate: '04-05-2020',
-      estimation: 8
+      dateRange: ['2020-04-19', '2020-04-19'],
+      estimation: 8,
+      menu: false,
+      menu1: false,
+      modal: false,
     }
-  }
+  },
+  computed: {
+    dateRangeText () {
+      return this.dateRange
+        .map(date => this.$moment(date).format('ll'))
+        .join(' ~ ')
+    },
+  },
 }
 
 </script>
