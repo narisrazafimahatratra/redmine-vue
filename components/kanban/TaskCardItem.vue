@@ -97,6 +97,7 @@
               <v-text-field
                 label="Estimation"
                 prepend-inner-icon="schedule"
+                type="number"
                 outlined
                 v-model="estimation"
                 clearable
