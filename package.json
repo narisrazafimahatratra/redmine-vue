@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@nuxtjs/moment": "latest",
-    "nuxt": "^2.0.0",
+    "nuxt": "^3.4.3",
     "vuedraggable": "2.23.2"
   },
   "devDependencies": {
